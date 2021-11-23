@@ -51,58 +51,47 @@ public class PagSeguroPayment {
         final String pagseguroWsRequestAddress = String.format(webService, vendorEmail, vendorToken);
 
         //nova implementação
-        checkoutXml = "<?xml version=\"1.0\"?>\n" +
-                "<checkout>\n" +
-                "  <sender>\n" +
-                "    <name>Jose Comprador</name>\n" +
-                "    <email>comprador@uol.com.br</email>\n" +
-                "    <phone>\n" +
-                "      <areaCode>99</areaCode>\n" +
-                "      <number>999999999</number>\n" +
-                "    </phone>\n" +
-                "    <documents>\n" +
-                "      <document>\n" +
-                "        <type>CPF</type>\n" +
-                "        <value>11475714734</value>\n" +
-                "      </document>\n" +
-                "    </documents>\n" +
-                "  </sender>\n" +
-                "  <currency>BRL</currency>\n" +
-                "  <items>\n" +
-                "    <item>\n" +
-                "      <id>0001</id>\n" +
-                "      <description>Produto PagSeguroI</description>\n" +
-                "      <amount>99999.99</amount>\n" +
-                "      <quantity>1</quantity>\n" +
-                "      <weight>10</weight>\n" +
-                "      <shippingCost>1.00</shippingCost>\n" +
-                "    </item>\n" +
-                "  </items>\n" +
-                "  <redirectURL>http://lojamodelo.com.br/return.html</redirectURL>\n" +
-                "  <extraAmount>10.00</extraAmount>\n" +
-                "  <reference>REF1234</reference>\n" +
-                "  <shipping>\n" +
-                "    <address>\n" +
-                "      <street>Av. PagSeguro</street>\n" +
-                "      <number>9999</number>\n" +
-                "      <complement>99o andar</complement>\n" +
-                "      <district>Jardim Internet</district>\n" +
-                "      <city>Cidade Exemplo</city>\n" +
-                "      <state>SP</state>\n" +
-                "      <country>BRA</country>\n" +
-                "      <postalCode>99999999</postalCode>\n" +
-                "    </address>\n" +
-                "    <type>1</type>\n" +
-                "    <cost>1.00</cost>\n" +
-                "    <addressRequired>true</addressRequired>\n" +
-                "  </shipping>\n" +
-                "  <timeout>25</timeout>\n" +
-                "  <maxAge>999999999</maxAge>\n" +
-                "  <maxUses>999</maxUses>\n" +
-                "  <receiver>\n" +
-                "    <email>suporte@lojamodelo.com.br</email>\n" +
-                "  </receiver>\n" +
-                "  <enableRecover>false</enableRecover>\n" +
+        checkoutXml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>  \n" +
+                "<checkout>  \n" +
+                "    <currency>BRL</currency>  \n" +
+                "    <items>  \n" +
+                "        <item>  \n" +
+                "            <id>0001</id>  \n" +
+                "            <description>License Key Software</description>  \n" +
+                "            <amount>25.00</amount>  \n" +
+                "            <quantity>1</quantity>  \n" +
+//                "            <weight>1000</weight>  \n" +
+                "        </item>  \n" +
+//                "        <item>  \n" +
+//                "            <id>0002</id>  \n" +
+//                "            <description>Notebook Rosa</description>  \n" +
+//                "            <amount>25600.00</amount>  \n" +
+//                "            <quantity>2</quantity>  \n" +
+//                "            <weight>750</weight>  \n" +
+//                "        </item>  \n" +
+                "    </items>  \n" +
+                "    <reference>REF1234</reference>  \n" +
+                "    <sender>  \n" +
+                "        <name>Comprador Teste</name>  \n" +
+                "        <email>c74064313745617132186@sandbox.pagseguro.com.br</email>  \n" +
+                "        <phone>  \n" +
+                "            <areacode>11</areacode>  \n" +
+                "            <number>56273440</number>  \n" +
+                "        </phone>  \n" +
+                "    </sender>  \n" +
+//                "    <shipping>  \n" +
+//                "        <type>1</type>  \n" +
+//                "        <address>  \n" +
+//                "            <street>Av. Brig. Faria Lima</street>  \n" +
+//                "            <number>1384</number>  \n" +
+//                "            <complement>5o andar</complement>  \n" +
+//                "            <district>Jardim Paulistano</district>  \n" +
+//                "            <postalcode>01452002</postalcode>  \n" +
+//                "            <city>Sao Paulo</city>  \n" +
+//                "            <state>SP</state>  \n" +
+//                "            <country>BRA</country>  \n" +
+//                "        </address>  \n" +
+//                "    </shipping>  \n" +
                 "</checkout>";
 
         try {
@@ -113,6 +102,7 @@ public class PagSeguroPayment {
         } catch (UnsupportedEncodingException e) {
             Log.d("PAG_SEGURO", e.getMessage());
         }
+
         // Make RESTful webservice call using AsyncHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -120,18 +110,26 @@ public class PagSeguroPayment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 String response = null;
+
+                System.out.println("################dados request################");
+                System.out.println(pagseguroWsRequestAddress);
+
                 try {
                     response = new String(responseBody, "ISO-8859-1");
+                    System.out.println(response);
                 } catch (UnsupportedEncodingException e) {
                     Log.d("PAG_SEGURO", e.getMessage());
                 }
+
                 try {
                     // read checkout code
                     final XmlPullParser parser = Xml.newPullParser();
                     parser.setInput(new StringReader(response));
                     int eventType = parser.getEventType();
+
                     String checkoutCode="";
                     String checkoutDate="";
+
                     while (eventType != XmlPullParser.END_DOCUMENT) {
                         if(eventType == XmlPullParser.START_TAG) {
                             if(parser.getName().equalsIgnoreCase("code")){
@@ -170,13 +168,17 @@ public class PagSeguroPayment {
                 StringBuilder errors = new StringBuilder();
                 errors.append("List of errors\n");
                 errors.append("Statuscode: " + statusCode + "\n");
+
                 String response = null;
+
                 try {
                     response = new String(responseBody, "ISO-8859-1");
+                    System.out.println(response);
                 } catch (UnsupportedEncodingException e) {
                     Log.d("PAG_SEGURO", e.getMessage());
                 }
-                try {
+
+                /*try {
                     final XmlPullParser parser = Xml.newPullParser();
                     parser.setInput(new StringReader(response));
                     int eventType = parser.getEventType();
@@ -196,7 +198,7 @@ public class PagSeguroPayment {
                     Log.d("PAG_SEGURO", e.getMessage());
                 } catch (IOException e) {
                     Log.d("PAG_SEGURO", e.getMessage());
-                }
+                }*/
             }
         });
     }
