@@ -51,7 +51,7 @@ public class PagSeguroPayment {
         final String pagseguroWsRequestAddress = String.format(webService, vendorEmail, vendorToken);
 
         //nova implementação
-        checkoutXml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>  \n" +
+        /*checkoutXml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>  \n" +
                 "<checkout>  \n" +
                 "    <currency>BRL</currency>  \n" +
                 "    <items>  \n" +
@@ -92,7 +92,7 @@ public class PagSeguroPayment {
 //                "            <country>BRA</country>  \n" +
 //                "        </address>  \n" +
 //                "    </shipping>  \n" +
-                "</checkout>";
+                "</checkout>";*/
 
         try {
             checkoutEntity = new StringEntity(checkoutXml);
