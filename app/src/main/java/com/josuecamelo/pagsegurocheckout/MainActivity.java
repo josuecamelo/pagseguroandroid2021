@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
+            //這裡我們設置客戶數據
             public void onClick(View v) {
                 // at this point you should check if the user has internet connection
                 // before stating the pagseguro checkout process.(it will need internet connection)
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 PagSeguroAddress buyerAddress = pagseguro.address("Av. Tiradentes", "49", "Apt201", "Anápolis", "75064350", "Recife", PagSeguroBrazilianStates.PERNAMBUCO);
                 PagSeguroShipping buyerShippingOption = pagseguro.shipping(PagSeguroShippingType.PAC, buyerAddress);
                 PagSeguroCheckout checkout = pagseguro.checkout("Ref0001", shoppingCart, buyer, buyerShippingOption);
+
                 // starting payment process
                 new PagSeguroPayment(MainActivity.this).pay(checkout.buildCheckoutXml());
             }

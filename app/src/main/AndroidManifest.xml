@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--this is a webview -->
         <activity
             android:name=".PagSeguroActivity"
             android:label="@string/title_activity_pag_seguro" >
